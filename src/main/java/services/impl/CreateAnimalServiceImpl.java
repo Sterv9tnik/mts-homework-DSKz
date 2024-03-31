@@ -26,4 +26,9 @@ public class CreateAnimalServiceImpl implements CreateAnimalService {
         }
         while (animalCount < 10);
     }
+
+    public Animal createRandomAnimal() {
+        int rand = new Random().nextInt(0, 4);
+        return CreateAnimalService.getRandomAnimal(rand);
+    }
 }
