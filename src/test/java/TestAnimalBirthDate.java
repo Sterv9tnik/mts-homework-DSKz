@@ -12,6 +12,8 @@ import java.time.LocalDate;
 
 import static entities.AbstractAnimal.getLeapYearBirthDate;
 import static entities.AbstractAnimal.getNotLeapYearBirthDate;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class TestAnimalBirthDate {
 
@@ -25,7 +27,8 @@ public class TestAnimalBirthDate {
         Animal animal = createAnimalServiceImpl.createRandomAnimal();
         animal.setBirthDate(getLeapYearBirthDate());
 
-        searchService.checkLeapYearAnimal(animal);
+        boolean isLeapYear = searchService.checkLeapYearAnimal(animal);
+        assertThat(isLeapYear).isTrue();
     }
 
     @Test
@@ -34,7 +37,8 @@ public class TestAnimalBirthDate {
         Animal animal = createAnimalServiceImpl.createRandomAnimal();
         animal.setBirthDate(getNotLeapYearBirthDate());
 
-        searchService.checkLeapYearAnimal(animal);
+        boolean isLeapYear = searchService.checkLeapYearAnimal(animal);
+        assertThat(isLeapYear).isFalse();
     }
 
     @ParameterizedTest
@@ -43,20 +47,12 @@ public class TestAnimalBirthDate {
     public void failureAnimalWithBadBirthDate(LocalDate birthDate) {
         Animal animal = createAnimalServiceImpl.createRandomAnimal();
         animal.setBirthDate(birthDate);
-        try {
-            searchService.checkLeapYearAnimal(animal);
-        } catch (InvalidAnimalBirthDateException exception) {
-            System.out.println(String.format("Работа метода завершилась ошибкой: %s", exception));
-        }
+        assertThrows(InvalidAnimalBirthDateException.class, () -> searchService.checkLeapYearAnimal(animal));
     }
 
     @Test
     @DisplayName("Отрицательный тест. Передать null вместо животного")
     public void failureAnimalWithBadAnimal() {
-        try {
-            searchService.checkLeapYearAnimal(null);
-        } catch (InvalidAnimalBirthDateException | InvalidAnimalException exception) {
-            System.out.println(String.format("Работа метода завершилась ошибкой: %s", exception));
-        }
+        assertThrows(InvalidAnimalException.class, () -> searchService.checkLeapYearAnimal(null));
     }
 }
