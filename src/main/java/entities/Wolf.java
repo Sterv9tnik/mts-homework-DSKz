@@ -12,6 +12,10 @@ public class Wolf extends Predator {
         super(breed, name, cost, character, birthDate);
     }
 
+    public Wolf(Animal animal) {
+        super(animal.getBreed(), animal.getName(), animal.getCost(), animal.getCharacter(), animal.getBirthDate());
+    }
+
     public static Wolf getRandomWolf() {
         return new Wolf(getRandomBreed(), getRandomName(), getRandomCost(), getRandomCharacter(), getRandomBirthDate(WOLF_YEARS));
     }

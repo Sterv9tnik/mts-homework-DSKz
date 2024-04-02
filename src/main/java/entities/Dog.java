@@ -12,6 +12,10 @@ public class Dog extends Pet {
         super(breed, name, cost, character, birthDate);
     }
 
+    public Dog(Animal animal) {
+        super(animal.getBreed(), animal.getName(), animal.getCost(), animal.getCharacter(), animal.getBirthDate());
+    }
+
     public static Dog getRandomDog() {
         return new Dog(getRandomBreed(), getRandomName(), getRandomCost(), getRandomCharacter(), getRandomBirthDate(DOG_YEARS));
     }
