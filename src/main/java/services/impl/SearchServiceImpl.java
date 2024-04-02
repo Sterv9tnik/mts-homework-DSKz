@@ -11,7 +11,7 @@ import java.util.Objects;
 public class SearchServiceImpl implements SearchService {
 
     @Override
-    public void checkLeapYearAnimal(Animal animal) throws InvalidAnimalBirthDateException {
+    public boolean checkLeapYearAnimal(Animal animal) throws InvalidAnimalBirthDateException {
 
         if (Objects.isNull(animal)) {
             throw new InvalidAnimalException("На вход пришел некорректный объект животного");
@@ -29,5 +29,7 @@ public class SearchServiceImpl implements SearchService {
             String message = String.format("%s не был рожден в високосный год", animal.getName());
             System.out.println(message);
         }
+
+        return animalBirthDate.isLeapYear();
     }
 }

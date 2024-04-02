@@ -5,5 +5,5 @@ import exceptions.InvalidAnimalBirthDateException;
 
 public interface SearchService {
 
-    void checkLeapYearAnimal(Animal animal) throws InvalidAnimalBirthDateException;
+    boolean checkLeapYearAnimal(Animal animal) throws InvalidAnimalBirthDateException;
 }
