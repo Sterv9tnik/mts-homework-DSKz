@@ -115,4 +115,73 @@ public class TestAnimalsRepository {
 
         assertThat(actualAnimalMap).isEqualTo(expectedAnimalMap);
     }
+
+    @Test
+    @DisplayName("Положительный тест. Возвращен средний возраст животных")
+    public void successGetAverageYear(){
+        Animal wolf = Wolf.getRandomWolf();
+        wolf.setBirthDate(LocalDate.now().minusYears(3));
+
+        Animal dog = Dog.getRandomDog();
+        dog.setBirthDate(LocalDate.now().minusYears(4));
+
+        Animal shark = Shark.getRandomShark();
+        shark.setBirthDate(LocalDate.now().minusYears(6));
+
+        List<Animal> animalList = List.of(wolf, dog, shark);
+        int actualAverageAge = animalsRepositoryImpl.findAverageAge(animalList);
+        int expectedAverageAge = (wolf.getAge() + dog.getAge() + shark.getAge())/animalList.size();
+        assertThat(actualAverageAge).isEqualTo(expectedAverageAge);
+    }
+
+    @Test
+    @DisplayName("Положительный тест. Возвращен средний возраст животных")
+    public void successFindOldAndExpensive(){
+        Animal wolf = Wolf.getRandomWolf();
+        wolf.setBirthDate(LocalDate.now().minusYears(3));
+        wolf.setCost(1500.0);
+
+        Animal cat = Cat.getRandomCat();
+        cat.setBirthDate(LocalDate.now().minusYears(7));
+        cat.setCost(3500.0);
+
+        Animal dog = Dog.getRandomDog();
+        dog.setBirthDate(LocalDate.now().minusYears(6));
+        dog.setCost(1000.0);
+
+        Animal shark = Shark.getRandomShark();
+        shark.setBirthDate(LocalDate.now().minusYears(10));
+        shark.setCost(5000.0);
+
+        List<Animal> animalList = List.of(wolf, cat, dog, shark);
+        List<Animal> actualAnimalList = animalsRepositoryImpl.findOldAndExpensive(animalList, 5);
+        List<Animal> expectedAnimalList = List.of(shark, cat);
+        assertThat(actualAnimalList).isEqualTo(expectedAnimalList);
+    }
+
+    @Test
+    @DisplayName("Положительный тест. Возвращен список животных с наименьшей стоимостью")
+    public void successFindMinCostAnimals(){
+        Animal wolf = Wolf.getRandomWolf();
+        wolf.setCost(1500.0);
+        wolf.setName("Абоба");
+
+        Animal cat = Cat.getRandomCat();
+        cat.setCost(3500.0);
+        cat.setName("Буба");
+
+
+        Animal dog = Dog.getRandomDog();
+        dog.setCost(1000.0);
+        dog.setName("Вива");
+
+        Animal shark = Shark.getRandomShark();
+        shark.setCost(5000.0);
+        shark.setName("Гена");
+
+        List<Animal> animalList = List.of(wolf, cat, dog, shark);
+        List<String> actualAnimalList = animalsRepositoryImpl.findMinCostAnimals(animalList);
+        List<String> expectedAnimalList = List.of(dog.getName(), cat.getName(), wolf.getName());
+        assertThat(actualAnimalList).isEqualTo(expectedAnimalList);
+    }
 }

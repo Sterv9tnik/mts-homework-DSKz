@@ -4,10 +4,7 @@ import entities.Animal;
 import services.AnimalsRepository;
 
 import java.time.LocalDate;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class AnimalsRepositoryImpl implements AnimalsRepository {
@@ -58,5 +55,36 @@ public class AnimalsRepositoryImpl implements AnimalsRepository {
         System.out.println(groupedByClass);
 
         return groupedByClass;
+    }
+
+    @Override
+    public int findAverageAge(List<Animal> animalList) {
+        return (int) animalList.stream().mapToInt(Animal::getAge).average().orElseThrow();
+    }
+
+    @Override
+    public List<Animal> findOldAndExpensive(List<Animal> animalList, int age) {
+        double averageCost = animalList.stream()
+                .mapToDouble(Animal::getCost)
+                .average()
+                .orElseThrow();
+
+        System.out.println(averageCost);
+
+        return animalList.stream()
+                .filter(animal -> animal.getAge() > age)
+                .filter(animal -> animal.getCost() > averageCost)
+                .sorted(Comparator.comparing(Animal::getBirthDate))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<String> findMinCostAnimals(List<Animal> animalList) {
+        return animalList.stream()
+                .sorted(Comparator.comparingDouble(Animal::getCost))
+                .limit(3)
+                .map(Animal::getName)
+                .sorted(Comparator.reverseOrder())
+                .collect(Collectors.toList());
     }
 }
