@@ -99,9 +99,7 @@ public abstract class AbstractAnimal implements Animal {
         int monthDifferent = LocalDate.now().getMonthValue() - getBirthDate().getMonthValue();
         int dayDifferent = LocalDate.now().getDayOfMonth() - getBirthDate().getDayOfMonth();
 
-        if (yearDifferent != 0 && monthDifferent < 0) {
-            yearDifferent--;
-        } else if (yearDifferent != 0 && monthDifferent == 0 && dayDifferent < 0) {
+        if (yearDifferent != 0 && (monthDifferent < 0 || monthDifferent == 0 && dayDifferent < 0)) {
             yearDifferent--;
         }
 
