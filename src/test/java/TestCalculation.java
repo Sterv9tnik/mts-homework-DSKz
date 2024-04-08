@@ -19,7 +19,7 @@ public class TestCalculation {
     @DisplayName("Отрицательный тест. Сложение переменных")
     public void failureAdding() {
         int a = 2;
-        int b = 3;
+        int b = 2;
         int c = 6;
 
         assertThat(a + b).isEqualTo(c);
