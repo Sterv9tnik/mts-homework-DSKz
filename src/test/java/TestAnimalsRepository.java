@@ -34,8 +34,8 @@ public class TestAnimalsRepository {
 
         Map<String, LocalDate> actualAnimalMap = animalsRepositoryImpl.findLeapYearNames(animalList);
         Map<String, LocalDate> expectedAnimalMap = Map.of(
-                String.format("%s %s", wolf.getClass(), wolf.getName()), wolf.getBirthDate(),
-                String.format("%s %s", dog.getClass(), dog.getName()), dog.getBirthDate()
+                String.format("%s %s", wolf.getClass().getSimpleName(), wolf.getName()), wolf.getBirthDate(),
+                String.format("%s %s", dog.getClass().getSimpleName(), dog.getName()), dog.getBirthDate()
         );
 
         assertThat(actualAnimalMap).isEqualTo(expectedAnimalMap);
@@ -108,10 +108,9 @@ public class TestAnimalsRepository {
         cloneDogWithDifferentName.setName("Клоун с бипкой");
 
         List<Animal> animalList = List.of(wolf, cloneWolf, cloneWolfWithDifferentName, cloneOfWolfWithDifferentName, dog, cloneDogWithDifferentName);
-        Map<String, Integer> actualAnimalMap = animalsRepositoryImpl.findDuplicate(animalList);
-        Map<String, Integer> expectedAnimalMap = Map.of(
-                wolf.getClass().toString(), 2,
-                dog.getClass().toString(), 0
+        Map<String, List<Animal>> actualAnimalMap = animalsRepositoryImpl.findDuplicate(animalList);
+        Map<String, List<Animal>> expectedAnimalMap = Map.of(
+                wolf.getClass().getSimpleName(), List.of(wolf, cloneWolfWithDifferentName)
         );
 
         assertThat(actualAnimalMap).isEqualTo(expectedAnimalMap);
