@@ -12,6 +12,10 @@ public class Shark extends Predator {
         super(breed, name, cost, character, birthDate);
     }
 
+    public Shark(Animal animal) {
+        super(animal.getBreed(), animal.getName(), animal.getCost(), animal.getCharacter(), animal.getBirthDate());
+    }
+
     public static Shark getRandomShark() {
         return new Shark(getRandomBreed(), getRandomName(), getRandomCost(), getRandomCharacter(), getRandomBirthDate(SHARK_YEARS));
     }

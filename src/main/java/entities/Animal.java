@@ -23,4 +23,6 @@ public interface Animal {
     void setCharacter(String character);
 
     void setBirthDate(LocalDate birthdate);
+
+    int getAge();
 }
