@@ -1,5 +1,8 @@
 package entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import helpers.EAverageLifeExpectancy;
 import lombok.Setter;
 import lombok.ToString;
@@ -16,6 +19,13 @@ import java.util.concurrent.ThreadLocalRandom;
 
 @ToString
 @Setter
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = Dog.class, name = "DOG"),
+        @JsonSubTypes.Type(value = Cat.class, name = "CAT"),
+        @JsonSubTypes.Type(value = Wolf.class, name = "WOLF"),
+        @JsonSubTypes.Type(value = Shark.class, name = "SHARK")
+})
 public abstract class AbstractAnimal implements Animal, Serializable {
 
     public AbstractAnimal() {
@@ -119,11 +129,6 @@ public abstract class AbstractAnimal implements Animal, Serializable {
         }
 
         return yearDifferent;
-    }
-
-    @Override
-    public String takeAllInformation() {
-        return String.format("%s %s %s %s %,.2f %s %s", this.animalNumber, this.getClass().getSimpleName(), this.getBreed(), this.getName(), this.getCost(), this.getCharacter(), this.getBirthDate());
     }
 
     @Override

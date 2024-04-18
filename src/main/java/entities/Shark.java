@@ -8,6 +8,9 @@ import static helpers.EAverageLifeExpectancy.SHARK_YEARS;
 
 public class Shark extends Predator {
 
+    public Shark() {
+    }
+
     public Shark(String breed, String name, Double cost, String character, LocalDate birthDate) {
         super(breed, name, cost, character, birthDate);
     }

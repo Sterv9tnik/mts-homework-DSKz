@@ -38,27 +38,6 @@ public class CreateAnimalServiceImpl implements CreateAnimalService {
         return CreateAnimalService.getRandomAnimal(rand);
     }
 
-    public void createAnimalsToFile() {
-        List<Animal> animals = createAnimals(5);
-
-        try (FileOutputStream fos = new FileOutputStream("src/main/resources/animals.txt")) {
-            byte[] bytes = animalListToString(animals).getBytes();
-            fos.write(bytes);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private String animalListToString(List<Animal> animals){
-        StringBuilder stringBuilder = new StringBuilder();
-        for (Animal animal : animals) {
-            stringBuilder
-                    .append(animal.takeAllInformation())
-                    .append("\n");
-        }
-        return stringBuilder.toString();
-    }
-
     public void createAnimalsToFileNIO() {
         List<Animal> animals = createAnimals(5);
 

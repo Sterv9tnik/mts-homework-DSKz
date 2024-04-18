@@ -1,17 +1,19 @@
 package services.impl;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import entities.AbstractAnimal;
 import entities.Animal;
 import services.AnimalsRepository;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
-
-import static helpers.Base64Helper.encryptString;
 
 public class AnimalsRepositoryImpl implements AnimalsRepository {
 
@@ -40,33 +42,23 @@ public class AnimalsRepositoryImpl implements AnimalsRepository {
             animalMap.put(oldestAnimal, oldestAnimal.getAge());
         }
 
+        sendToJson(animalMap);
         System.out.println(animalMap);
         return animalMap;
     }
 
-    public void findOlderAnimalAndSendItToFile(List<Animal> animalList, int age) {
-        Map<Animal, Integer> animalMap = findOlderAnimal(animalList, age);
-        try (FileOutputStream fos = new FileOutputStream("src/main/resources/findOlderAnimal.txt")) {
-            byte[] bytes = animalListToString(animalMap).getBytes();
-            fos.write(bytes);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private String animalListToString(Map<Animal, Integer> animalMap) {
-        StringBuilder stringBuilder = new StringBuilder();
+    public void sendToJson(Map<Animal, Integer> animalMap) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.findAndRegisterModules();
+        File file = new File("src/main/resources/findOlderAnimal.json");
         animalMap.entrySet().forEach(entry -> {
-            stringBuilder
-                    .append(entry.getKey().takeAllInformation())
-                    .append(" ")
-                    .append(entry.getValue())
-                    .append(" ")
-                    .append(encryptString(entry.getKey().getSecretInformation()))
-                    .append("\n");
+            try {
+                entry.getKey().setSecretInformation("boop");
+                objectMapper.writeValue(file, entry.getKey());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         });
-
-        return stringBuilder.toString();
     }
 
     @Override
@@ -119,17 +111,16 @@ public class AnimalsRepositoryImpl implements AnimalsRepository {
                 .collect(Collectors.toList());
     }
 
-    public void forJson(List<Animal> animalList, int age){
+    public void getFromJson() {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.findAndRegisterModules();
-        Map<Animal, Integer> animalMap = findOlderAnimal(animalList, age);
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         File file = new File("src/main/resources/findOlderAnimal.json");
-        animalMap.entrySet().forEach(entry -> {
-            try {
-                objectMapper.writeValue(file, entry.getKey());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
+        try {
+            AbstractAnimal animal = objectMapper.readValue(file, AbstractAnimal.class);
+            System.out.println(animal);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

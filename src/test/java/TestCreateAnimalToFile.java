@@ -14,7 +14,6 @@ public class TestCreateAnimalToFile {
 
     @Test
     public void createAnimalsToFile() {
-        createAnimalServiceImpl.createAnimalsToFile();
         createAnimalServiceImpl.createAnimalsToFileNIO();
         createAnimalServiceImpl.readFromFileNIO();
     }
@@ -22,7 +21,6 @@ public class TestCreateAnimalToFile {
     @Test
     public void getSecretInformation() {
         Animal cat = Cat.getRandomCat();
-        System.out.println(cat);
         System.out.println(cat.getSecretInformation());
 
         Animal wolf = Wolf.getRandomWolf();
@@ -42,6 +40,7 @@ public class TestCreateAnimalToFile {
 
         List<Animal> animalList = List.of(wolf, shark, dog);
 
-        animalsRepositoryImpl.forJson(animalList, 5);
+        animalsRepositoryImpl.findOlderAnimal(animalList, 5);
+        animalsRepositoryImpl.getFromJson();
     }
 }
