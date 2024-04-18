@@ -25,4 +25,8 @@ public interface Animal {
     void setBirthDate(LocalDate birthdate);
 
     int getAge();
+
+    String takeAllInformation();
+
+    String getSecretInformation();
 }

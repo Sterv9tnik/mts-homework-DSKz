@@ -4,6 +4,10 @@ import helpers.EAverageLifeExpectancy;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
@@ -12,14 +16,19 @@ import java.util.concurrent.ThreadLocalRandom;
 
 @ToString
 @Setter
-public abstract class AbstractAnimal implements Animal {
+public abstract class AbstractAnimal implements Animal, Serializable {
+
+    public AbstractAnimal() {
+    }
 
     public AbstractAnimal(String breed, String name, Double cost, String character, LocalDate birthDate) {
+        this.animalNumber = counter++;
         this.breed = breed;
         this.name = name;
         this.cost = cost;
         this.character = character;
         this.birthDate = birthDate;
+        this.secretInformation = getSecretInformation();
     }
 
     @Override
@@ -35,6 +44,10 @@ public abstract class AbstractAnimal implements Animal {
         return Objects.hash(breed, name, cost, character, birthDate);
     }
 
+    private static int counter = 1;
+
+    private int animalNumber;
+
     protected String breed;
 
     protected String name;
@@ -44,6 +57,8 @@ public abstract class AbstractAnimal implements Animal {
     protected String character;
 
     protected LocalDate birthDate;
+
+    protected String secretInformation;
 
     protected static String getRandomName() {
         List<String> names = List.of("Бандит", "Никуся", "Кусака", "Зося", "Кася", "Лаки", "Буба", "Юморист");
@@ -104,5 +119,28 @@ public abstract class AbstractAnimal implements Animal {
         }
 
         return yearDifferent;
+    }
+
+    @Override
+    public String takeAllInformation() {
+        return String.format("%s %s %s %s %,.2f %s %s", this.animalNumber, this.getClass().getSimpleName(), this.getBreed(), this.getName(), this.getCost(), this.getCharacter(), this.getBirthDate());
+    }
+
+    @Override
+    public String getSecretInformation() {
+        String secretInformation = null;
+        try (BufferedReader br = new BufferedReader(new FileReader("src/main/resources/secretStore/secretInformation.txt"))) {
+            String str;
+            while ((str = br.readLine()) != null) {
+                if (str.contains(this.getClass().getSimpleName())) {
+                    secretInformation = str.split(" ")[1];
+                    break;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return secretInformation;
     }
 }

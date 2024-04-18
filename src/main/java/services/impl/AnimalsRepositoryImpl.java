@@ -1,11 +1,17 @@
 package services.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import entities.Animal;
 import services.AnimalsRepository;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static helpers.Base64Helper.encryptString;
 
 public class AnimalsRepositoryImpl implements AnimalsRepository {
 
@@ -36,6 +42,31 @@ public class AnimalsRepositoryImpl implements AnimalsRepository {
 
         System.out.println(animalMap);
         return animalMap;
+    }
+
+    public void findOlderAnimalAndSendItToFile(List<Animal> animalList, int age) {
+        Map<Animal, Integer> animalMap = findOlderAnimal(animalList, age);
+        try (FileOutputStream fos = new FileOutputStream("src/main/resources/findOlderAnimal.txt")) {
+            byte[] bytes = animalListToString(animalMap).getBytes();
+            fos.write(bytes);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String animalListToString(Map<Animal, Integer> animalMap) {
+        StringBuilder stringBuilder = new StringBuilder();
+        animalMap.entrySet().forEach(entry -> {
+            stringBuilder
+                    .append(entry.getKey().takeAllInformation())
+                    .append(" ")
+                    .append(entry.getValue())
+                    .append(" ")
+                    .append(encryptString(entry.getKey().getSecretInformation()))
+                    .append("\n");
+        });
+
+        return stringBuilder.toString();
     }
 
     @Override
@@ -86,5 +117,19 @@ public class AnimalsRepositoryImpl implements AnimalsRepository {
                 .map(Animal::getName)
                 .sorted(Comparator.reverseOrder())
                 .collect(Collectors.toList());
+    }
+
+    public void forJson(List<Animal> animalList, int age){
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.findAndRegisterModules();
+        Map<Animal, Integer> animalMap = findOlderAnimal(animalList, age);
+        File file = new File("src/main/resources/findOlderAnimal.json");
+        animalMap.entrySet().forEach(entry -> {
+            try {
+                objectMapper.writeValue(file, entry.getKey());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 }
