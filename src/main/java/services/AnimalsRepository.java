@@ -12,5 +12,11 @@ public interface AnimalsRepository {
 
     Map<Animal, Integer> findOlderAnimal(List<Animal> animalList, int age);
 
-    Map<String, Integer> findDuplicate(List<Animal> animalList);
+    Map<String, List<Animal>> findDuplicate(List<Animal> animalList);
+
+    int findAverageAge(List<Animal> animalList);
+
+    List<Animal> findOldAndExpensive(List<Animal> animalList, int age);
+
+    List<String> findMinCostAnimals(List<Animal> animalList);
 }

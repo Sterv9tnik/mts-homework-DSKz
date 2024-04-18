@@ -8,6 +8,9 @@ import static helpers.EAverageLifeExpectancy.CAT_YEARS;
 
 public class Cat extends Pet {
 
+    public Cat() {
+    }
+
     public Cat(String breed, String name, Double cost, String character, LocalDate birthDate) {
         super(breed, name, cost, character, birthDate);
     }

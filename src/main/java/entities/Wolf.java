@@ -8,6 +8,9 @@ import static helpers.EAverageLifeExpectancy.WOLF_YEARS;
 
 public class Wolf extends Predator {
 
+    public Wolf() {
+    }
+
     public Wolf(String breed, String name, Double cost, String character, LocalDate birthDate) {
         super(breed, name, cost, character, birthDate);
     }
