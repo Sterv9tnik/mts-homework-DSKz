@@ -36,6 +36,4 @@ public interface Animal {
     void setCharacter(String character);
 
     void setBirthDate(LocalDate birthdate);
-
-    void setSecretInformation(String secretInformation);
 }

@@ -17,6 +17,9 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
+import static helpers.Base64Helper.decryptString;
+import static helpers.Base64Helper.encryptString;
+
 @ToString
 @Setter
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
@@ -38,7 +41,7 @@ public abstract class AbstractAnimal implements Animal, Serializable {
         this.cost = cost;
         this.character = character;
         this.birthDate = birthDate;
-        this.secretInformation = getSecretInformation();
+        this.secretInformation = encryptString(getSecretInformationFromFile());
     }
 
     @Override
@@ -131,8 +134,8 @@ public abstract class AbstractAnimal implements Animal, Serializable {
         return yearDifferent;
     }
 
-    @Override
-    public String getSecretInformation() {
+
+    public String getSecretInformationFromFile() {
         String secretInformation = null;
         try (BufferedReader br = new BufferedReader(new FileReader("src/main/resources/secretStore/secretInformation.txt"))) {
             String str;
@@ -147,5 +150,14 @@ public abstract class AbstractAnimal implements Animal, Serializable {
         }
 
         return secretInformation;
+    }
+
+    @Override
+    public String getSecretInformation(){
+        return this.secretInformation;
+    }
+
+    public void decryptSecretInfo(){
+        this.secretInformation = decryptString(secretInformation);
     }
 }

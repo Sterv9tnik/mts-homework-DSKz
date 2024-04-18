@@ -39,6 +39,7 @@ public class TestCreateAnimalToFile {
         shark.setBirthDate(LocalDate.now().minusYears(3).plusDays(1));
 
         List<Animal> animalList = List.of(wolf, shark, dog);
+        System.out.println(wolf);
 
         animalsRepositoryImpl.findOlderAnimal(animalList, 5);
         animalsRepositoryImpl.getFromJson();

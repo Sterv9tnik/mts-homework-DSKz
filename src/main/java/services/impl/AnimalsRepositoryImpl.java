@@ -53,7 +53,6 @@ public class AnimalsRepositoryImpl implements AnimalsRepository {
         File file = new File("src/main/resources/findOlderAnimal.json");
         animalMap.entrySet().forEach(entry -> {
             try {
-                entry.getKey().setSecretInformation("boop");
                 objectMapper.writeValue(file, entry.getKey());
             } catch (IOException e) {
                 e.printStackTrace();
@@ -118,6 +117,7 @@ public class AnimalsRepositoryImpl implements AnimalsRepository {
         File file = new File("src/main/resources/findOlderAnimal.json");
         try {
             AbstractAnimal animal = objectMapper.readValue(file, AbstractAnimal.class);
+            animal.decryptSecretInfo();
             System.out.println(animal);
         } catch (IOException e) {
             e.printStackTrace();
